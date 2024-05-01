@@ -6,7 +6,6 @@ import type { ComponentType } from 'react';
 import * as React from 'react';
 import type { SvgProps } from 'react-native-svg';
 
-import { Settings } from '@/screens';
 import {
   colors,
   Feed as FeedIcon,
@@ -16,14 +15,16 @@ import {
 } from '@/ui';
 
 import { CoursesNavigator } from './courses-all';
+import { SettingsNavigator } from './settings-navigator';
 import { StudyNavigator } from './study-navigator';
 import { StyleNavigator } from './style-navigator';
 
 type TabParamList = {
   StyleNavigator: undefined;
   StudyNavigator: undefined;
-  Settings: undefined;
+  // Settings: undefined;
   CoursesNavigator: undefined;
+  SettingsNavigator: undefined;
 };
 
 type TabType = {
@@ -42,7 +43,7 @@ const tabsIcons: TabIconsType = {
   StyleNavigator: (props: SvgProps) => <StyleIcon {...props} />,
   CoursesNavigator: (props: SvgProps) => <FeedIcon {...props} />,
   StudyNavigator: (props: SvgProps) => <StudyIcon {...props} />,
-  Settings: (props: SvgProps) => <SettingsIcon {...props} />,
+  SettingsNavigator: (props: SvgProps) => <SettingsIcon {...props} />,
 };
 
 export type TabList<T extends keyof TabParamList> = {
@@ -67,8 +68,8 @@ const tabs: TabType[] = [
     label: '学习',
   },
   {
-    name: 'Settings',
-    component: Settings,
+    name: 'SettingsNavigator',
+    component: SettingsNavigator,
     label: '设置',
   },
 ];

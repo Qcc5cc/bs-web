@@ -1,5 +1,3 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable react-native/no-inline-styles */
 import { Env } from '@env';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
@@ -61,12 +59,7 @@ export const MyCourses = () => {
   return (
     <>
       <FocusAwareStatusBar />
-      <View
-        className="w-full justify-between"
-        style={{
-          minHeight: 2,
-        }}
-      >
+      <View className="w-full justify-between">
         <ScrollView>
           <View className="w-full flex-1 justify-between  px-4 pt-7">
             <FlashList
@@ -76,7 +69,6 @@ export const MyCourses = () => {
               numColumns={2}
               horizontal={false}
               ListEmptyComponent={<EmptyList isLoading={isLoading} />}
-              className="justify-between"
             />
           </View>
         </ScrollView>

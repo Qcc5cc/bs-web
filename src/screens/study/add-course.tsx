@@ -1,5 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import * as React from 'react';
 import { useState } from 'react';
@@ -11,15 +12,23 @@ import { z } from 'zod';
 
 import { useAddCourse } from '@/api';
 import { getItem } from '@/core/storage';
-import { Button, ControlledInput, Image, showErrorMessage, View } from '@/ui';
+import {
+  Button,
+  ControlledInput,
+  Image,
+  showErrorMessage,
+  Text,
+  View,
+} from '@/ui';
 
 const schema = z.object({
   course_name: z.string().min(2),
   teacher: z.string().min(2),
-  school: z.string().min(2),
+  school: z.string(),
   introduction: z.string().min(10),
   imageUrl: z.any(),
   teacher_id: z.any(),
+  type: z.any(),
 });
 
 type FormType = z.infer<typeof schema>;
@@ -57,8 +66,9 @@ export const AddCourse = () => {
   const onSubmit = (dataCourse: FormType) => {
     console.log('cc');
     dataCourse.teacher_id = getItem('userId');
+    dataCourse.type = selected;
     if (file) dataCourse.imageUrl = file;
-    console.log(dataCourse);
+    // console.log(dataCourse);
     addCourse(
       { ...dataCourse },
       {
@@ -76,6 +86,8 @@ export const AddCourse = () => {
       }
     );
   };
+
+  const [selected, setSelected] = useState();
   return (
     <ScrollView>
       <View className="flex-1 p-4 ">
@@ -114,7 +126,17 @@ export const AddCourse = () => {
           multiline
           testID="introduction-input"
         />
-
+        <Text>课程类型</Text>
+        <Picker
+          selectedValue={selected}
+          onValueChange={(itemValue) => setSelected(itemValue)}
+        >
+          <Picker.Item label="计算机" value="计算机" />
+          <Picker.Item label="历史" value="历史" />
+          <Picker.Item label="理学" value="理学" />
+          <Picker.Item label="经济学" value="经济学" />
+          <Picker.Item label="其他" value="其他" />
+        </Picker>
         <Button
           label="添加课程"
           loading={isLoading}

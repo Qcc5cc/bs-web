@@ -2,12 +2,8 @@ import React from 'react';
 
 import { FocusAwareStatusBar, ScrollView, View } from '@/ui';
 
-import { ButtonVariants } from './button-variants';
-import { ColorVariants } from './color-variants';
 import { CourseList } from './course-list';
 import { CourseSwiper } from './course-swiper';
-import { InputVariants } from './input-variants';
-import { TextVariants } from './text-variants';
 
 export const Style = () => {
   return (
@@ -18,10 +14,10 @@ export const Style = () => {
           {/* <ATry /> */}
           <CourseSwiper />
           <CourseList />
-          <TextVariants />
+          {/* <TextVariants />
           <ColorVariants />
           <InputVariants />
-          <ButtonVariants />
+          <ButtonVariants /> */}
         </View>
       </ScrollView>
     </>

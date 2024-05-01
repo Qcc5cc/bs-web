@@ -50,11 +50,10 @@ export const Control = () => {
           <FlashList
             data={courses}
             renderItem={renderItem}
-            estimatedItemSize={200}
+            estimatedItemSize={500}
             numColumns={2}
             horizontal={false}
             ListEmptyComponent={<EmptyList isLoading={isLoading} />}
-            className="justify-between"
           />
         </View>
       </ScrollView>

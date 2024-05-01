@@ -2,28 +2,16 @@
 import { useNavigation } from '@react-navigation/native';
 import { FlashList } from '@shopify/flash-list';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import { useCourses } from '@/api';
 import type { CoursePost } from '@/api/courses';
-import { EmptyList } from '@/ui';
+import { EmptyList, Text } from '@/ui';
 
 import { CourseShow } from './course-show';
 
 export const CourseList = () => {
   const { data, isLoading, isError } = useCourses();
-  // React.useEffect(() => {
-  //   if (data)
-  //     data.forEach((val, index) => {
-  //       if (val.imageUrl)
-  //         data[index].imageUrl =
-  //           'data:image/png;base64,' + data[index].imageUrl;
-  //       else {
-  //         data[index].imageUrl =
-  //           'https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80';
-  //       }
-  //     });
-  // }, [data]);
 
   const { navigate } = useNavigation();
 
@@ -36,6 +24,7 @@ export const CourseList = () => {
     ),
     [navigate]
   );
+
   if (isError) {
     return (
       <View>
@@ -43,24 +32,39 @@ export const CourseList = () => {
       </View>
     );
   }
+  const types = ['计算机', '历史', '理学', '经济学', '其他'];
 
   return (
-    <View
-      className="w-full justify-between"
-      // eslint-disable-next-line react-native/no-inline-styles
-      style={{
-        minHeight: 2,
-      }}
-    >
-      <FlashList
-        data={data}
-        renderItem={renderItem}
-        estimatedItemSize={200}
-        numColumns={2}
-        horizontal={false}
-        ListEmptyComponent={<EmptyList isLoading={isLoading} />}
-        className="justify-between"
-      />
+    <View className="w-full flex-1 justify-between">
+      {types.map((item) => {
+        return (
+          <View className="min-h-5 w-full  justify-between" key={item}>
+            <View className="w-full">
+              <Text variant="h3" className="pb-3 pt-2">
+                {item}
+              </Text>
+              <Text
+                variant="sm"
+                className="absolute right-0 top-4"
+                onPress={() => navigate('CourseType', { type: item })}
+              >
+                查看更多&gt;
+              </Text>
+            </View>
+            <View className="min-h-200">
+              <FlashList
+                data={data?.filter((Item) => Item.type === item).slice(0, 4)}
+                renderItem={renderItem}
+                estimatedItemSize={200}
+                numColumns={2}
+                horizontal={false}
+                ListEmptyComponent={<EmptyList isLoading={isLoading} />}
+                className="justify-between"
+              />
+            </View>
+          </View>
+        );
+      })}
     </View>
   );
 };

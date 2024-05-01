@@ -6,4 +6,5 @@ export type CoursePost = {
   imageUrl: string;
   introduction: string;
   imageBlob?: string;
+  type: string;
 };

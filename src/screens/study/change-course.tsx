@@ -1,4 +1,5 @@
 /* eslint-disable max-lines-per-function */
+import { Picker } from '@react-native-picker/picker';
 import { useRoute } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import * as React from 'react';
@@ -11,7 +12,14 @@ import { z } from 'zod';
 
 import { useChangeCourse } from '@/api/courses/use-change-courses';
 import type { RouteProp } from '@/navigation/types';
-import { Button, ControlledInput, Image, showErrorMessage, View } from '@/ui';
+import {
+  Button,
+  ControlledInput,
+  Image,
+  showErrorMessage,
+  Text,
+  View,
+} from '@/ui';
 
 const schema = z.object({
   course_name: z.string().min(2),
@@ -20,6 +28,7 @@ const schema = z.object({
   introduction: z.string().min(10),
   imageUrl: z.any(),
   id: z.any(),
+  type: z.any(),
 });
 
 type FormType = z.infer<typeof schema>;
@@ -59,6 +68,7 @@ export const ChangeCourse = () => {
     dataCourse.school = school;
     dataCourse.introduction = introduction;
     dataCourse.id = params.course.id;
+    dataCourse.type = selected;
     console.log('cc');
     if (file) dataCourse.imageUrl = file;
     changeCourse(
@@ -86,6 +96,7 @@ export const ChangeCourse = () => {
   const [introduction, onChangeIntroduction] = React.useState(
     params.course.introduction
   );
+  const [selected, setSelected] = useState(params.course.type);
   return (
     <ScrollView>
       <View className="flex-1 p-4 ">
@@ -131,7 +142,17 @@ export const ChangeCourse = () => {
           value={introduction}
           onChangeText={(text) => onChangeIntroduction(text)}
         />
-
+        <Text>课程类型</Text>
+        <Picker
+          selectedValue={selected}
+          onValueChange={(itemValue) => setSelected(itemValue)}
+        >
+          <Picker.Item label="计算机" value="计算机" />
+          <Picker.Item label="历史" value="历史" />
+          <Picker.Item label="理学" value="理学" />
+          <Picker.Item label="经济学" value="经济学" />
+          <Picker.Item label="其他" value="其他" />
+        </Picker>
         <Button
           label="提交"
           loading={isLoading}
