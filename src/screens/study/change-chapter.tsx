@@ -62,65 +62,67 @@ export const ChangeChapter = () => {
     dataCourse.chapter_name = chapterName;
     dataCourse.id = params.chapter.id;
     dataCourse.resourceUrl = params.chapter.resourceUrl;
-
-    if (updateFile) {
-      const name = file.substring(file.lastIndexOf('/') + 1);
-      RNFetchBlob.fetch(
-        'POST',
-        Env.SERVER_URL + '/api/chapter/addFile',
-        {
-          'Content-Type': 'multipart/form-data', // 请求头
-        },
-        [
+    if (chapterName === '') showErrorMessage('章节名不能为空');
+    else {
+      if (updateFile) {
+        const name = file.substring(file.lastIndexOf('/') + 1);
+        RNFetchBlob.fetch(
+          'POST',
+          Env.SERVER_URL + '/api/chapter/addFile',
           {
-            name: 'file', // 文件字段名
-            filename: name, // 文件名
-            data: RNFetchBlob.wrap(file), // 文件路径
+            'Content-Type': 'multipart/form-data', // 请求头
           },
-        ]
-      )
-        .then((response) => {
-          // 处理上传成功的响应
-          dataCourse.resourceUrl = response.data;
-          changeChapter(
-            { ...dataCourse },
+          [
             {
-              onSuccess: () => {
-                showMessage({
-                  message: 'Course change successfully',
-                  type: 'success',
-                });
-                // here you can navigate to the post list and refresh the list data
-                //queryClient.invalidateQueries(usePosts.getKey());
-              },
-              onError: () => {
-                showErrorMessage('Error adding course');
-              },
-            }
-          );
-          console.log(dataCourse);
-        })
-        .catch((error) => {
-          // 处理上传失败的错误
-          console.log('Upload error', error);
-        });
-    } else {
-      changeChapter(
-        { ...dataCourse },
-        {
-          onSuccess: () => {
-            showMessage({
-              message: 'Course change successfully',
-              type: 'success',
-            });
-            // here you can navigate to the post list and refresh the list data
-            //queryClient.invalidateQueries(usePosts.getKey());
-          },
-          onError: () => {
-            showErrorMessage('Error adding course');
-          },
-        }
-      );
+              name: 'file', // 文件字段名
+              filename: name, // 文件名
+              data: RNFetchBlob.wrap(file), // 文件路径
+            },
+          ]
+        )
+          .then((response) => {
+            // 处理上传成功的响应
+            dataCourse.resourceUrl = response.data;
+            changeChapter(
+              { ...dataCourse },
+              {
+                onSuccess: () => {
+                  showMessage({
+                    message: '修改成功',
+                    type: 'success',
+                  });
+                  // here you can navigate to the post list and refresh the list data
+                  //queryClient.invalidateQueries(usePosts.getKey());
+                },
+                onError: () => {
+                  showErrorMessage('Error adding course');
+                },
+              }
+            );
+            console.log(dataCourse);
+          })
+          .catch((error) => {
+            // 处理上传失败的错误
+            console.log('Upload error', error);
+          });
+      } else {
+        changeChapter(
+          { ...dataCourse },
+          {
+            onSuccess: () => {
+              showMessage({
+                message: 'Course change successfully',
+                type: 'success',
+              });
+              // here you can navigate to the post list and refresh the list data
+              //queryClient.invalidateQueries(usePosts.getKey());
+            },
+            onError: () => {
+              showErrorMessage('Error adding course');
+            },
+          }
+        );
+      }
     }
   };
   const [chapterName, onChangeChapterName] = React.useState(

@@ -69,24 +69,29 @@ export const ChangeCourse = () => {
     dataCourse.introduction = introduction;
     dataCourse.id = params.course.id;
     dataCourse.type = selected;
-    console.log('cc');
-    if (file) dataCourse.imageUrl = file;
-    changeCourse(
-      { ...dataCourse },
-      {
-        onSuccess: () => {
-          showMessage({
-            message: '修改成功',
-            type: 'success',
-          });
-          // here you can navigate to the post list and refresh the list data
-          //queryClient.invalidateQueries(usePosts.getKey());
-        },
-        onError: () => {
-          showErrorMessage('修改失败');
-        },
-      }
-    );
+    if (course_name === '') showErrorMessage('请输入课程名称');
+    else if (teacher === '') showErrorMessage('请输入教师名称');
+    else if (school === '') showErrorMessage('请输入学习名称');
+    else if (introduction === '') showErrorMessage('请输入课程介绍名称');
+    else {
+      if (file) dataCourse.imageUrl = file;
+      changeCourse(
+        { ...dataCourse },
+        {
+          onSuccess: () => {
+            showMessage({
+              message: '修改成功',
+              type: 'success',
+            });
+            // here you can navigate to the post list and refresh the list data
+            //queryClient.invalidateQueries(usePosts.getKey());
+          },
+          onError: () => {
+            showErrorMessage('修改失败');
+          },
+        }
+      );
+    }
   };
   const [course_name, onChangeCourseName] = React.useState(
     params.course.course_name

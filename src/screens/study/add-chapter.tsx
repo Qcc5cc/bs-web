@@ -23,7 +23,7 @@ import {
 } from '@/ui';
 
 const schema = z.object({
-  chapter_name: z.string().min(2),
+  chapter_name: z.string({ required_error: '请输入章节名称' }),
   resourceUrl: z.any(),
   course_id: z.any(),
 });
@@ -56,51 +56,53 @@ export const AddChapter = () => {
     }
   };
   const onSubmit = (dataCourse: FormType) => {
-    console.log('cc');
-    dataCourse.course_id = params.id;
-    console.log(dataCourse);
-    const name = file.substring(file.lastIndexOf('/') + 1);
-    RNFetchBlob.fetch(
-      'POST',
-      Env.SERVER_URL + '/api/chapter/addFile',
-      {
-        'Content-Type': 'multipart/form-data', // 请求头
-      },
-      [
+    if (file === null) showErrorMessage('请上传视频');
+    else {
+      dataCourse.course_id = params.id;
+      console.log(dataCourse);
+      const name = file.substring(file.lastIndexOf('/') + 1);
+      RNFetchBlob.fetch(
+        'POST',
+        Env.SERVER_URL + '/api/chapter/addFile',
         {
-          name: 'file', // 文件字段名
-          filename: name, // 文件名
-          data: RNFetchBlob.wrap(file), // 文件路径
+          'Content-Type': 'multipart/form-data', // 请求头
         },
-      ]
-    )
-      .then((response) => {
-        console.log('cc');
-
-        // 处理上传成功的响应
-        dataCourse.resourceUrl = response.data;
-        addChapter(
-          { ...dataCourse },
+        [
           {
-            onSuccess: () => {
-              showMessage({
-                message: 'Course added successfully',
-                type: 'success',
-              });
-              // here you can navigate to the post list and refresh the list data
-              //queryClient.invalidateQueries(usePosts.getKey());
-            },
-            onError: () => {
-              showErrorMessage('Error adding course');
-            },
-          }
-        );
-        console.log(dataCourse);
-      })
-      .catch((error) => {
-        // 处理上传失败的错误
-        console.log('Upload error', error);
-      });
+            name: 'file', // 文件字段名
+            filename: name, // 文件名
+            data: RNFetchBlob.wrap(file), // 文件路径
+          },
+        ]
+      )
+        .then((response) => {
+          console.log('cc');
+
+          // 处理上传成功的响应
+          dataCourse.resourceUrl = response.data;
+          addChapter(
+            { ...dataCourse },
+            {
+              onSuccess: () => {
+                showMessage({
+                  message: '添加成功',
+                  type: 'success',
+                });
+                // here you can navigate to the post list and refresh the list data
+                //queryClient.invalidateQueries(usePosts.getKey());
+              },
+              onError: () => {
+                showErrorMessage('添加失败');
+              },
+            }
+          );
+          console.log(dataCourse);
+        })
+        .catch((error) => {
+          // 处理上传失败的错误
+          console.log('Upload error', error);
+        });
+    }
   };
   return (
     <>

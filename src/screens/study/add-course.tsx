@@ -22,10 +22,18 @@ import {
 } from '@/ui';
 
 const schema = z.object({
-  course_name: z.string().min(2),
-  teacher: z.string().min(2),
-  school: z.string(),
-  introduction: z.string().min(10),
+  course_name: z
+    .string({ required_error: '请输入课程名称' })
+    .min(2, { message: '课程名称不得少于两个字符' }),
+  teacher: z
+    .string({ required_error: '请输入教师名称' })
+    .min(2, { message: '教师名称不得少于两个字符' }),
+  school: z
+    .string({ required_error: '请输入学习名称' })
+    .min(2, { message: '学校名称不得少于两个字符' }),
+  introduction: z
+    .string({ required_error: '请输入课程介绍' })
+    .min(2, { message: '课程介绍不得少于10个字' }),
   imageUrl: z.any(),
   teacher_id: z.any(),
   type: z.any(),

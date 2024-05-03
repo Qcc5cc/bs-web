@@ -90,6 +90,10 @@ export const ControlChapter = () => {
                               .concat(chapters.slice(index + 1))
                           );
                           delChapter(item.id);
+                          showMessage({
+                            message: '删除成功',
+                            type: 'success',
+                          });
                         }}
                       />
                     </View>
